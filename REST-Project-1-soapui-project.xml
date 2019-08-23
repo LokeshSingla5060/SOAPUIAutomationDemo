@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1b70e965-42e6-4dee-99b9-23200309660b" activeEnvironment="Default" name="soapUIDemoProject" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" resourceRoot="" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="bade4725-285e-4d2e-92d9-657074823fad" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://slack.com" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>https://slack.com</con:endpoint></con:endpoints><con:resource name="Chat.postMessage" path="/api/chat.postMessage" id="1e7a7c86-dfe9-40db-9c8a-30150688f981"><con:settings/><con:parameters/><con:method name="Chat.postMessage 1" id="6c090ff0-2358-4e9d-b786-baf08ed7b5bd" method="POST"><con:settings/><con:parameters/><con:representation type="RESPONSE"><con:mediaType>application/json; charset=utf-8</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:chat="https://slack.com/api/chat.postMessage">chat:Response</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/json</con:mediaType><con:params/></con:representation><con:request name="Request 1" id="d69aca95-4b9d-473c-a8cb-cf9bcc44c29d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Authorization" value="Bearer xoxp-694458098816-688168754017-734955742935-3bf14922d416004e40c48f7678e34af9"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>https://slack.com</con:endpoint><con:request>{
+	"channel" : "#testPurpose",
+	"text" : "Test Purpose"
+}
+</con:request><con:originalUri>https://slack.com/api/chat.postMessage</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:request></con:method></con:resource></con:interface><con:testSuite id="f5023af8-2eb5-470b-be75-9a4d4117f506" name="TestSuite"><con:description>TestSuite generated for REST Service [https://slack.com]</con:description><con:settings/><con:runType>PARALLELL</con:runType><con:testCase id="528c806a-7404-42a9-bedf-4305057a2d5c" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Send message on channel with valid data" searchProperties="true"><con:description>TestCase generated for REST Resource [Chat.postMessage] located at [/api/chat.postMessage]</con:description><con:settings/><con:testStep type="restrequest" name="Request 1" id="b6bd851b-97a5-4ff0-900c-b9dfbc6bb2ea"><con:settings/><con:config service="https://slack.com" resourcePath="/api/chat.postMessage" methodName="Chat.postMessage 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Request 1" id="d69aca95-4b9d-473c-a8cb-cf9bcc44c29d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Authorization" value="Bearer xoxp-694458098816-688168754017-733310628704-dbc5a8540ed4b2f5cab7db20ff63c6b3"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>https://slack.com</con:endpoint><con:request>{
+	"channel" : "#testPurpose",
+	"text" : "Test Purpose"
+}
+</con:request><con:originalUri>https://slack.com/api/chat.postMessage</con:originalUri><con:assertion type="GroovyScriptAssertion" id="0af5a403-590a-4894-93de-31a945ca165f" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+import com.eviware.soapui.support.GroovyUtils.*
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+//def groovyUtils = new com.eviware.soapui.support.GroovyUtils(context);
+//def projectPath = groovyUtils.projectPath;
+
+ExtentReports report = new ExtentReports("E://HTML_REPORTS.html", false);
+ExtentTest testCasesReport = report.startTest("Send message on channel with valid data");
+ExtentTest testSteps = report.startTest("Request Headers");
+def requestHeader=messageExchange.getRequestHeaders()
+testSteps.log(LogStatus.PASS, requestHeader.toString());
+ExtentTest testSteps2 = report.startTest("Request Payload");
+def requestMessage=messageExchange.getRequestContent()
+testSteps2.log(LogStatus.PASS, requestMessage.toString());
+ExtentTest testSteps3 = report.startTest("Response Body");
+def responseMessage=messageExchange.response.responseContent
+testSteps3.log(LogStatus.PASS, responseMessage.toString());
+ExtentTest testSteps4 = report.startTest("Validate Response");
+def json = new JsonSlurper().parseText(responseMessage)
+
+log.info json.message.text
+
+if(json.channel.equals("CM7KS9A3C")){
+testSteps4.log(LogStatus.PASS, "channel id is CM7KS9A3C");
+}
+
+if(json.message.text.equals("Test Purpose")){
+testSteps4.log(LogStatus.PASS, "Message Text is Test Purpose");
+}
+
+
+testCasesReport.appendChild(testSteps).appendChild(testSteps2).appendChild(testSteps3).appendChild(testSteps4)
+report.endTest(testCasesReport);
+report.flush();
+
+
+</scriptText></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="c7673727-0f1b-4120-b276-b2c2682c8203" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Send message on channel with special characters" searchProperties="true"><con:description>TestCase generated for REST Resource [Chat.postMessage] located at [/api/chat.postMessage]</con:description><con:settings/><con:testStep type="restrequest" name="Request 1" id="5bed7824-f432-48b2-9110-b19e81730f6b"><con:settings/><con:config service="https://slack.com" resourcePath="/api/chat.postMessage" methodName="Chat.postMessage 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Request 1" id="d69aca95-4b9d-473c-a8cb-cf9bcc44c29d" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  &lt;con:entry key="Authorization" value="Bearer xoxp-694458098816-688168754017-733310628704-dbc5a8540ed4b2f5cab7db20ff63c6b3"/>
+  &lt;con:entry key="Content-Type" value="application/json"/>
+&lt;/xml-fragment></con:setting></con:settings><con:endpoint>https://slack.com</con:endpoint><con:request>{
+	"channel" : "#testPurpose",
+	"text" : "12345678*"
+}
+</con:request><con:originalUri>https://slack.com/api/chat.postMessage</con:originalUri><con:assertion type="GroovyScriptAssertion" id="0af5a403-590a-4894-93de-31a945ca165f" name="Script Assertion"><con:configuration><scriptText>import groovy.json.JsonSlurper;
+import com.eviware.soapui.support.GroovyUtils.*
+
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+//def groovyUtils = new com.eviware.soapui.support.GroovyUtils(context);
+//def projectPath = groovyUtils.projectPath;
+
+ExtentReports report = new ExtentReports("E://HTML_REPORTS.html", false);
+ExtentTest testCasesReport = report.startTest("Send message on channel with valid special characters");
+ExtentTest testSteps = report.startTest("Request Headers");
+def requestHeader=messageExchange.getRequestHeaders()
+testSteps.log(LogStatus.PASS, requestHeader.toString());
+ExtentTest testSteps2 = report.startTest("Request Payload");
+def requestMessage=messageExchange.getRequestContent()
+testSteps2.log(LogStatus.PASS, requestMessage.toString());
+ExtentTest testSteps3 = report.startTest("Response Body");
+def responseMessage=messageExchange.response.responseContent
+testSteps3.log(LogStatus.PASS, responseMessage.toString());
+ExtentTest testSteps4 = report.startTest("Validate Response");
+def json = new JsonSlurper().parseText(responseMessage)
+
+log.info json.message.text
+
+if(json.channel.equals("CM7KS9A3C")){
+testSteps4.log(LogStatus.PASS, "channel id is CM7KS9A3C");
+}
+
+if(json.message.text.equals("12345678*")){
+testSteps4.log(LogStatus.PASS, "Message Text is 12345678*");
+}
+
+
+testCasesReport.appendChild(testSteps).appendChild(testSteps2).appendChild(testSteps3).appendChild(testSteps4)
+report.endTest(testCasesReport);
+report.flush();
+
+
+</scriptText></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/><con:parameterOrder/></con:restRequest></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
